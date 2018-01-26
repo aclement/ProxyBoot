@@ -1,0 +1,9 @@
+---
+applications:
+- name: APPNAME
+  memory: 1024m
+  instances: 1
+  path: ProxyBoot-0.0.1-SNAPSHOT.jar
+  health-check-type: process
+  env: 
+    eureka.client.serviceUrl.defaultZone: SERVICE_REGISTRY_URL

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# This should probably be a cf cli plugin
+
+if [ $# == 0 ] ; then
+  echo cfproxy appName [service_registry_url] [service_registry_metadata_map]
+  echo Example: cfproxy foo http://devex-sr.cfapps.io/eureka/ user=rimmer
+  exit 1;
+fi
+
+applicationName=$1
+serviceRegistryUrl=$2
+
+echo "Proxying application $1"
+
+cp ~/ProxyBoot-0.0.1-SNAPSHOT.jar .
+#cat ~/manifest.yml.template | sed "s/APPNAME/${applicationName}-proxy/" > manifest.yml
+cat ~/manifest.yml.template | sed "s/APPNAME/${applicationName}/" > manifest.yml
+if [ ! -z $2 ]
+then
+	echo "    eureka.client.serviceUrl.defaultZone: $2" >> manifest.yml
+fi
+
+if [ ! -z $3 ]
+then
+	# convert it to eureka.instance.metadataMap.key: value
+	echo "    eureka.instance.metadataMap.needsExplicitRouting: true" >> manifest.yml
+	echo "    eureka.instance.metadataMap.$3" | sed 's/=/: /' >> manifest.yml
+fi
+
+echo "    spring.application.name: ${applicationName}" >> manifest.yml
+
+cf push
