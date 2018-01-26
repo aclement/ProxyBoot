@@ -1,5 +1,5 @@
 # ProxyBoot
-A simple boot app able to stand in and proxy to other places (using ssh)
+A simple boot app able to stand in for a CF deployed app and proxy to other places (using ssh)
 
 There isn't much to this app. Basically it is deployed to PCF and pretends to be an app but
 requests that are made to it (once appropriate tunnels have been setup) are routed elsewhere,
